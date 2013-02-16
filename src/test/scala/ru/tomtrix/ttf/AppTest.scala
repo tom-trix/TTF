@@ -1,29 +1,20 @@
-package ru.tomtrix.ttf;
+import org.scalatest.FeatureSpec
+import org.scalatest.GivenWhenThen
+import ru.tomtrix.ttf.ExtendedString._
 
-import junit.framework._;
-import Assert._;
+class AppTest extends FeatureSpec with GivenWhenThen {
 
-object AppTest {
-    def suite: Test = {
-        val suite = new TestSuite(classOf[AppTest]);
-        suite
+  feature("Extended String") {
+
+    info("Extended strings manage the troubles related to NULL, non-trim and case-sensitive strings")
+
+    scenario("given different non-null strings") {
+      var a = "hello"
+      var b = "hello"
+      assert(a === b)
+
+      b = " HeLLo   "
+      assert(a === b)
     }
-
-    def main(args : Array[String]) {
-        junit.textui.TestRunner.run(suite);
-    }
-}
-
-/**
- * Unit test for simple Starter.
- */
-class AppTest extends TestCase("app") {
-
-    /**
-     * Rigourous Tests :-)
-     */
-    def testOK() = assertTrue(true);
-    def testKO() = assertTrue(false);
-    
-
+  }
 }
