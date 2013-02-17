@@ -1,11 +1,19 @@
 package ru.tomtrix.ttf
 
-import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
-import org.eclipse.swt.SWT
 import ExtendedShell._
-import org.eclipse.swt.events.{SelectionEvent, SelectionListener, SelectionAdapter}
+import org.eclipse.swt.SWT
+import patterns.Disposable._
+import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
+import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
+import patterns.Repository
 
 object Starter extends App {
+  using(new Repository("trix.sqlite")(SQLITE)) { t =>
+    t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
+    t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
+    t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))
+    println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)))
+  }
   val display = new Display
   val shell = new Shell(display)
 
