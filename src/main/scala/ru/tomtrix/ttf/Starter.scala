@@ -6,9 +6,12 @@ import patterns.Disposable._
 import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
 import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
 import patterns.Repository
+import ExtendedString._
 
 object Starter extends App {
-  using(new Repository("trix.sqlite")(SQLITE)) { t =>
+  for (i <- 0 to 120)
+    println(i + " " + normalize(i)("рубль", "рубля", "рублей"))
+  /*using(new Repository("trix.sqlite")(SQLITE)) { t =>
     t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
     t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
     t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))
@@ -36,5 +39,5 @@ object Starter extends App {
   while (!shell.isDisposed)
     if (!display.readAndDispatch())
       display.sleep
-  display.dispose()
+  display.dispose()*/
 }
