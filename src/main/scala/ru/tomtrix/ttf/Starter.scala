@@ -6,8 +6,10 @@ import patterns.Disposable._
 import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
 import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
 import patterns.Repository
+import org.apache.log4j.Logger
 
 object Starter extends App {
+  Logger.getLogger(getClass).warn("fuck me, baby!")
   using(new Repository("trix.sqlite")(SQLITE)) { t =>
     t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
     t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
