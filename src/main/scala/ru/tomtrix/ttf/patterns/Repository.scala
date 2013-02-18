@@ -1,6 +1,7 @@
 package ru.tomtrix.ttf.patterns
 
 import java.sql.DriverManager
+import org.apache.log4j.Logger
 import collection.mutable.ArrayBuffer
 import ru.tomtrix.ttf.{MYSQL, SQLITE, DBMS}
 import ru.tomtrix.ttf.patterns.Disposable._
@@ -20,17 +21,24 @@ class Repository(db: String)(dbms: DBMS) {
   }
 
   private def prepare(sql: String, params: Seq[Any]) = {
-    val ps = connection.prepareStatement(sql)
-    (1 to params.length).zip(params) foreach {t => ps.setObject(t._1, t._2)}
-    ps
+    try {
+      val ps = connection.prepareStatement(sql)
+      (1 to params.length).zip(params) foreach {t => ps.setObject(t._1, t._2)}
+      Some(ps)
+    } catch {
+      case e: Exception => Logger.getLogger(getClass).error("Error in database connection", e)
+      None
+    }
   }
 
   def getTable(sql: String, params: Seq[Any]) = {
     val result = ArrayBuffer[List[(String, Any)]]()
-    using (prepare(sql, params) executeQuery()) { rs =>
-      val columns = (1 to rs.getMetaData.getColumnCount) map {rs.getMetaData.getColumnName(_)}
-      while (rs.next())
-        result += ((1 to columns.size).map {p => columns(p-1) -> rs.getObject(p)}.toList)
+    for { st <- prepare(sql, params) } yield {
+      using (st.executeQuery()) { rs =>
+        val columns = (1 to rs.getMetaData.getColumnCount) map {rs.getMetaData.getColumnName(_)}
+        while (rs.next())
+          result += ((1 to columns.size).map {p => columns(p-1) -> rs.getObject(p)}.toList)
+      }
     }
     result.toList
   }
@@ -40,15 +48,19 @@ class Repository(db: String)(dbms: DBMS) {
   }
 
   def getTuple(sql: String, params: Seq[Any]) = {
-    getTable(sql, params)(0)
+    val result = getTable(sql, params)
+    if (result.size > 0) result(0)
+    else List()
   }
 
   def getValue[T](sql: String, params: Seq[Any]) = {
-    getAttribute[T](sql, params)(0)
+    val result = getAttribute[T](sql, params)
+    if (result.size > 0) Some(result(0))
+    else None
   }
 
   def execute(sql: String, params: Seq[Any]) {
-    prepare(sql, params) execute()
+    prepare(sql, params) foreach {_.execute()}
   }
 
   def dispose() {connection.close(); println("connection closed")}

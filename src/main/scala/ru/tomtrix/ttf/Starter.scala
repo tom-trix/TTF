@@ -11,13 +11,11 @@ import ExtendedString._
 
 object Starter extends App {
   Logger.getLogger(getClass).warn("fuck me, baby!")
-  for (i <- 0 to 120)
-    println(i + " " + normalize(i)("рубль", "рубля", "рублей"))
   using(new Repository("trix.sqlite")(SQLITE)) { t =>
     t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
     t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
     t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))
-    println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)))
+    println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1))
   }
   val display = new Display
   val shell = new Shell(display)
