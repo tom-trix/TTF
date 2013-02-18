@@ -8,7 +8,7 @@ class ExtendedString(source: String) {
   /**
    * fsefsef
    * @param that fsefse
-   * @return
+   * @return drgfes
    */
   def ===(that: String) = {
     val x = if (source == null || source == None) "" else source.trim.toLowerCase
@@ -19,7 +19,7 @@ class ExtendedString(source: String) {
   /**
    * fsefse
    * @param that fsefse
-   * @return
+   * @return htrhgwe
    */
   def !==(that: String) = !(===(that))
 }
@@ -28,5 +28,30 @@ class ExtendedString(source: String) {
  * fsfse
  */
 object ExtendedString {
+  /**
+   * greioijgioer
+   * @param s
+   * @return
+   */
   implicit def toExtendedString(s: String) = new ExtendedString(s)
+
+  /**
+   * fwefjoijf
+   * @param number t4ete4
+   * @param one t4ete4
+   * @param two te4te4
+   * @param five te4t4e
+   * @return y5
+   */
+  def normalize(number: Number)(one: String, two: String, five: String) = {
+    val ends = (t: Int) => number.toString endsWith t.toString
+    (number.intValue == number) match {
+      case true =>
+        if ((11 to 14) exists ends) five
+        else if (ends(1)) one
+        else if ((2 to 4) exists ends) two
+        else five
+      case false => two
+    }
+  }
 }
