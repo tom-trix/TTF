@@ -30,7 +30,7 @@ class ExtendedString(source: String) {
 object ExtendedString {
   /**
    * greioijgioer
-   * @param s
+   * @param s fse
    * @return
    */
   implicit def toExtendedString(s: String) = new ExtendedString(s)

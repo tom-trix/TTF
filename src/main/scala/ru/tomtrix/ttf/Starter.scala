@@ -5,11 +5,25 @@ import org.eclipse.swt.SWT
 import patterns.Disposable._
 import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
 import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
-import patterns.Repository
+import patterns.{Undo, Repository}
 import org.apache.log4j.Logger
-import ExtendedString._
 
-object Starter extends App {
+object Starter extends App with Undo {
+  var s = "abc"
+  doCommand(() => {s = s.toUpperCase}, () => {s = s.toLowerCase})
+  println(s)
+  undo()
+  println(s)
+  redo()
+  println(s)
+  undo()
+  undo()
+  undo()
+  undo()
+  println(s)
+  redo()
+  println(s)
+
   Logger.getLogger(getClass).warn("fuck me, baby!")
   using(new Repository("trix.sqlite")(SQLITE)) { t =>
     t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
