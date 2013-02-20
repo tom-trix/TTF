@@ -33,7 +33,7 @@ object Starter extends App with Undo {
     println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1))
   }
   val display = new Display
-  showSplashScreen("images.jpg")
+  showSplashScreen("images.jpg", errorText = "Loading")
   val shell = new Shell(display)
 
   val lbl = new Button(shell, SWT.PUSH)

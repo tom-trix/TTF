@@ -4,7 +4,8 @@ import java.io._
 import org.eclipse.swt.SWT
 import patterns.Disposable._
 import org.eclipse.swt.widgets._
-import org.eclipse.swt.graphics.{GC, Image, Device}
+import org.eclipse.swt.graphics._
+import ru.tomtrix.ttf.patterns.SafeCode._
 
 /**
  * gre
@@ -51,17 +52,31 @@ object SWTWrappers {
   }
 
   /**
-   * fjoiwjg
-   * @param filename gsegs
+   * sfknmselnf
+   * @param filename gfsg
+   * @param size grsdssef
+   * @param opacity fagsrgsd
+   * @param errorText gsgs
+   * @return feSAf
    */
-  def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), opacity: Int = 220) {
-    val shell = new Shell(Display.getDefault, SWT.ON_TOP | SWT.SYSTEM_MODAL)
-    shell.setBackgroundImage(resizeImage(new Image(Display.getDefault, filename), size._1, size._2))
+  def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), opacity: Int = 220, errorText: String = "") = {
+    val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.SYSTEM_MODAL)
     shell setSize(size._1, size._2)
+    if (safe {() => shell setBackgroundImage(resizeImage(new Image(Display.getDefault, filename), size._1, size._2))} == None) {
+      val colour = new Color(Display getDefault, 202, 202, 222)
+      val lbl = new Label(shell, SWT.CENTER)
+      lbl setText errorText
+      lbl setFont new Font(Display getDefault, "Arial", 26, SWT.BOLD)
+      lbl setLocation(0, (shell.getSize.y/2.5).toInt)
+      lbl setSize(shell getSize)
+      lbl setBackground colour
+      shell setBackground colour
+    }
     val bounds = Display.getDefault.getPrimaryMonitor.getBounds
-    shell setLocation(bounds.width/2-shell.getSize.x/2, bounds.height/2-shell.getSize.y/2+40)
+    shell setLocation(bounds.width/2-shell.getSize.x/2, bounds.height/2-(shell.getSize.y/1.5).toInt)
     shell setAlpha opacity
     shell open()
+    shell
   }
 
   /**

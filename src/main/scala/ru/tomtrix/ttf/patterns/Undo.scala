@@ -8,14 +8,30 @@ import collection.mutable
  */
 trait Undo extends mutable.Undoable {
   type Cmd = (() => Any, () => Any)
+
   val undoStack = new util.ArrayDeque[Cmd]()
   val redoStack = new util.ArrayDeque[Cmd]()
+  var size = 100
 
-  def doCommand(funcDo: () => Any, funcUndo: () => Any) {
-    funcDo()
-    undoStack push (funcDo, funcUndo)
+  private def push(cmd: Cmd) {
+    undoStack push cmd
+    if (undoStack.size > size)
+      undoStack pollLast()
   }
 
+  /**
+   * nsfeonfose
+   * @param funcDo fgses
+   * @param funcUndo hrtrht
+   */
+  def doCommand(funcDo: () => Any, funcUndo: () => Any) {
+    funcDo()
+    push (funcDo, funcUndo)
+  }
+
+  /**
+   * fnksefs
+   */
   def undo() {
     if (undoStack.size > 0) {
       val cmd = undoStack pop()
@@ -24,11 +40,14 @@ trait Undo extends mutable.Undoable {
     }
   }
 
+  /**
+   * nfksbda
+   */
   def redo() {
     if (redoStack.size > 0) {
       val cmd = redoStack pop()
       cmd._1()
-      undoStack push cmd
+      push(cmd)
     }
   }
 }
