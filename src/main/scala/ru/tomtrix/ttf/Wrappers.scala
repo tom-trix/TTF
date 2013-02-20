@@ -59,21 +59,22 @@ object SWTWrappers {
    * @return feSAf
    */
   def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), errorText: String = "") = {
-    val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.SYSTEM_MODAL)
-    shell setSize(size._1, size._2)
-    if (safe {() => shell setBackgroundImage(resizeImage(new Image(Display.getDefault, filename), size._1, size._2))} == None) {
-      val colour = new Color(Display getDefault, 202, 202, 222)
-      val lbl = new Label(shell, SWT.CENTER)
-      lbl setText errorText
-      lbl setFont new Font(Display getDefault, "Arial", 26, SWT.BOLD)
-      lbl setLocation(0, (shell.getSize.y/2.5).toInt)
-      lbl setSize(shell getSize)
-      lbl setBackground colour
-      shell setBackground colour
-    }
-    val bounds = Display.getDefault.getPrimaryMonitor.getBounds
-    shell setLocation(bounds.width/2-shell.getSize.x/2, bounds.height/2-(shell.getSize.y/1.5).toInt)
+    // shell properties
+    val screen = Display.getDefault.getPrimaryMonitor.getBounds
+    val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.APPLICATION_MODAL)
     shell setAlpha 220
+    shell setSize(size._1, size._2)
+    shell setLocation(screen.width/2-shell.getSize.x/2, screen.height/2-(shell.getSize.y/1.5).toInt)
+    // try to load an image
+    val img = safe {() => resizeImage(new Image(Display getDefault, filename), size._1, size._2)}
+    shell setBackgroundImage(img.getOrElse(new Image(Display getDefault, size._1, size._2)))
+    // label properties
+    val gc = new GC(shell getBackgroundImage)
+    gc setBackground new Color(Display getDefault, 202, 202, 222)
+    if (img==None) gc fillRectangle(0, 0, size._1, size._2)
+    gc setFont new Font(Display getDefault, "Arial", 26, SWT.BOLD)
+    gc drawText(errorText, shell.getSize.x / 2 - gc.textExtent(errorText).x / 2, shell.getSize.y / 2 - gc.textExtent(errorText).y / 2, true)
+    // open and return it
     shell open()
     shell
   }
