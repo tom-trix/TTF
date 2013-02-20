@@ -2,7 +2,7 @@ package ru.tomtrix.ttf
 
 import org.eclipse.swt.widgets.Shell
 import org.eclipse.swt.events._
-import Wrappers._
+import SWTWrappers._
 
 /**
  * fesfsefs

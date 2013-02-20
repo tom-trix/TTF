@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.{Button, Label, Shell, Display}
 import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
 import patterns.{Undo, Repository}
 import org.apache.log4j.Logger
+import SWTWrappers._
 
 object Starter extends App with Undo {
   var s = "abc"
@@ -32,6 +33,7 @@ object Starter extends App with Undo {
     println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1))
   }
   val display = new Display
+  showSplashScreen("images.jpg")
   val shell = new Shell(display)
 
   val lbl = new Button(shell, SWT.PUSH)
