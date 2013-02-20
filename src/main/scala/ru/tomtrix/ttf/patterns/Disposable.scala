@@ -23,6 +23,14 @@ object Disposable {
       }
     }
 
+  implicit def closedispose2disposable[T](source: T { def close(); def dispose() }) : Disposable[T] =
+    new Disposable[T] {
+      def dispose() {
+        try { source.close(); source.dispose() }
+        catch { case t: Throwable => () }
+      }
+    }
+
   def using[T <% Disposable[T], V](what: T)(func: T => V): V = {
     try {
       func(what)

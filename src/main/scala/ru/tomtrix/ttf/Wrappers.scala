@@ -55,11 +55,10 @@ object SWTWrappers {
    * sfknmselnf
    * @param filename gfsg
    * @param size grsdssef
-   * @param opacity fagsrgsd
    * @param errorText gsgs
    * @return feSAf
    */
-  def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), opacity: Int = 220, errorText: String = "") = {
+  def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), errorText: String = "") = {
     val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.SYSTEM_MODAL)
     shell setSize(size._1, size._2)
     if (safe {() => shell setBackgroundImage(resizeImage(new Image(Display.getDefault, filename), size._1, size._2))} == None) {
@@ -74,9 +73,15 @@ object SWTWrappers {
     }
     val bounds = Display.getDefault.getPrimaryMonitor.getBounds
     shell setLocation(bounds.width/2-shell.getSize.x/2, bounds.height/2-(shell.getSize.y/1.5).toInt)
-    shell setAlpha opacity
+    shell setAlpha 220
     shell open()
     shell
+  }
+
+  def showSplashScreenFunc[T](filename: String, size: (Int, Int) = (480, 320), errorText: String = "") (func: Shell => T): T = {
+    using(showSplashScreen(filename, size, errorText)) {
+      t => func(t)
+    }
   }
 
   /**
