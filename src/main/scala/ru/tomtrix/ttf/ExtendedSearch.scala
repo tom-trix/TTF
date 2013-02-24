@@ -35,6 +35,12 @@ class ExtendedSearch(tbox: Text) {
     if (0 <= i && i < list.getItemCount)
       list setSelection i
   }
+  val drawCaretStamp = () => {
+    gc fillRectangle img.getBounds
+    gc drawLine(tbox.getCaretLocation.x, 0, tbox.getCaretLocation.x, tbox.getSize.y)
+    tbox setBackgroundImage null
+    tbox setBackgroundImage img
+  }
   shell.setLayout(new FillLayout())
   shell setSize(200, 100)
 
@@ -68,16 +74,24 @@ class ExtendedSearch(tbox: Text) {
 
   list.addKeyListener(new KeyAdapter {
     override def keyPressed(e: KeyEvent) {
-      if (e.keyCode == SWT.SPACE || e.keyCode == 13)
-        accept()
-      else if (e.keyCode == SWT.ESC)
-        hide()
-      else if (!e.character.toString.trim.isEmpty)
-        //tbox.setText(tbox.getText.substring(0, tbox.getCaretPosition) + e.character + tbox.getText.substring(tbox.getCaretPosition+1))
-      {
-        sourceShell.setActive()
-        val g = tbox.getText splitAt tbox.getCaretPosition-1
-        tbox.insert(e.character.toString)
+      e.keyCode match {
+        case SWT.SPACE => accept()
+        case 13 => accept()
+        case SWT.ESC => hide()
+        case SWT.ARROW_LEFT => {
+          tbox.setSelection(tbox.getCaretPosition-1)
+          drawCaretStamp()
+          e.doit = false
+        }
+        case SWT.ARROW_RIGHT => {
+          tbox.setSelection(tbox.getCaretPosition+1)
+          drawCaretStamp()
+          e.doit = false
+        }
+        case _ => if (!e.character.toString.trim.isEmpty) {
+          tbox insert(e.character.toString)
+          drawCaretStamp()
+        }
       }
     }
   })
@@ -102,9 +116,7 @@ class ExtendedSearch(tbox: Text) {
 
   shell.addShellListener(new ShellAdapter {
     override def shellActivated(e: ShellEvent) {
-      gc fillRectangle img.getBounds
-      gc drawLine(tbox.getCaretLocation.x, 0, tbox.getCaretLocation.x, tbox.getSize.y)
-      tbox setBackgroundImage img
+      drawCaretStamp()
     }
     override def shellDeactivated(e: ShellEvent) {
       tbox setBackgroundImage null
