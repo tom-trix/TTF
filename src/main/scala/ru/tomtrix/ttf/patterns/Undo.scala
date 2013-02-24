@@ -24,9 +24,9 @@ trait Undo extends mutable.Undoable {
    * @param funcDo fgses
    * @param funcUndo hrtrht
    */
-  def doCommand(funcDo: () => Any, funcUndo: () => Any) {
-    funcDo()
-    push (funcDo, funcUndo)
+  def doCommand(funcDo: => Any, funcUndo: => Any) {
+    funcDo
+    push (() => funcDo, () => funcUndo)
   }
 
   /**

@@ -27,7 +27,7 @@ class Repository(db: String)(dbms: DBMS) {
    * @return grege
    */
   private def prepare(sql: String, params: Seq[Any]) = {
-    safe { () =>
+    safe {
       val ps = connection.prepareStatement(sql)
       (1 to params.length).zip(params) foreach {p => ps.setObject(p._1, p._2)}
       ps

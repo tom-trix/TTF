@@ -18,7 +18,7 @@ class ExtendedShell(source: Shell) {
     val mouseListener = new MouseAdapter {override def mouseUp(e: MouseEvent) {showMessage(parent, "Закройте все окна")}}
     source addDisposeListener new DisposeListener {
       def widgetDisposed(x: DisposeEvent) {
-        safe {() =>
+        safe {
           parent.getChildren foreach {_.setEnabled(true)}
           parent removeMouseListener mouseListener
         }

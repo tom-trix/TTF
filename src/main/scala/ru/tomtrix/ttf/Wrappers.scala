@@ -47,8 +47,16 @@ object SWTWrappers {
    */
   def showMessage(parent: Shell, msg: String) {
     val mbox = new MessageBox(parent, SWT.ICON_INFORMATION | SWT.OK)
-    mbox.setMessage(msg)
-    mbox.open()
+    mbox setMessage msg
+    mbox open()
+  }
+
+  def invokeAsynch(func: => Unit) {
+    Display.getDefault.asyncExec(new Runnable {
+      def run() {safe {
+        func
+      }}
+    })
   }
 
   /**
@@ -60,13 +68,13 @@ object SWTWrappers {
    */
   def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), errorText: String = "") = {
     // shell properties
-    val screen = Display.getDefault.getPrimaryMonitor.getBounds
+    val screenSize = Display.getDefault.getPrimaryMonitor.getBounds
     val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.APPLICATION_MODAL)
     shell setAlpha 220
     shell setSize(size._1, size._2)
-    shell setLocation(screen.width/2-shell.getSize.x/2, screen.height/2-(shell.getSize.y/1.5).toInt)
+    shell setLocation(screenSize.width/2-shell.getSize.x/2, screenSize.height/2-(shell.getSize.y/1.5).toInt)
     // try to load an image
-    val img = safe {() => resizeImage(new Image(Display getDefault, filename), size._1, size._2)}
+    val img = safe {resizeImage(new Image(Display getDefault, filename), size._1, size._2)}
     shell setBackgroundImage(img.getOrElse(new Image(Display getDefault, size._1, size._2)))
     // label properties
     val gc = new GC(shell getBackgroundImage)
