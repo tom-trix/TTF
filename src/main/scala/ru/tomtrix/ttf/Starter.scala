@@ -4,11 +4,12 @@ import ExtendedShell._
 import org.eclipse.swt.SWT
 import patterns.Disposable._
 import org.eclipse.swt.widgets._
-import org.eclipse.swt.events.{SelectionEvent, SelectionAdapter}
+import org.eclipse.swt.events._
 import patterns.{ActorsManager, Undo, Repository}
 import org.apache.log4j.Logger
 import SWTWrappers._
 import ExtendedSearch._
+import org.eclipse.swt.graphics.{Color, GC, Image}
 
 object Starter extends App with Undo {
   using(ActorsManager) { g =>
@@ -43,6 +44,19 @@ object Starter extends App with Undo {
     val gt = new Text(shell, SWT.BORDER)
     gt.setLocation(30, 30)
     gt.setSize(130, 22)
+
+    /*val f = new Text(shell, SWT.SEARCH | SWT.ICON_SEARCH)
+    f.setBounds(20, 30, 120, 125)
+    val img = new Image(Display.getDefault, 120, 125)
+    val gc = new GC(img)
+    f.addModifyListener(new ModifyListener {
+      def modifyText(e: ModifyEvent) {
+        gc.fillRectangle(0, 0, 120, 125)
+        gc.drawLine(f.getCaretLocation.x, 0, f.getCaretLocation.x, 50)
+        f.setBackgroundImage(null)
+        f.setBackgroundImage(img)
+      }
+    })*/
 
     val lbl = new Button(shell, SWT.PUSH)
     lbl.setText("Hello world")
