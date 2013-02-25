@@ -72,7 +72,7 @@ object Starter extends App with Undo {
     })
     lbl.setBounds(100, 200, 60, 23)
 
-    gt.addData(scala.List("4", "5", "6", "7"))
+    gt.setSearch(scala.List("remove", "removeAll", "move", "moveAll", "rewrite", "rewriteAll"))
     shell.open()
     while (!shell.isDisposed)
       if (!display.readAndDispatch())

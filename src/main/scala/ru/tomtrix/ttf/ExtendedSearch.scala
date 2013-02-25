@@ -16,7 +16,7 @@ import widgets._
 class ExtendedSearch(tbox: Text) {
   private val shell = new Shell(Display getDefault, SWT.RESIZE | SWT.ON_TOP)
   private val list = new widgets.List(shell, SWT.SINGLE | SWT.BORDER)
-  private val data = ArrayBuffer[String]()
+  private var data = ArrayBuffer[String]()
   val img = new Image(Display getDefault, tbox getBounds)
   val gc = new GC(img)
   val hide = () => {
@@ -25,20 +25,31 @@ class ExtendedSearch(tbox: Text) {
   }
   val accept = () => {
     tbox setText list.getSelection.apply(0)
+    tbox setSelection tbox.getText.size
     hide()
   }
-  val drawCaretStamp = () => {
-    gc fillRectangle img.getBounds
-    gc drawLine(tbox.getCaretLocation.x, 0, tbox.getCaretLocation.x, tbox.getSize.y)
-    tbox setBackgroundImage null
-    tbox setBackgroundImage img
+  val search = () => {
+    val s = tbox getText(0, tbox.getCaretPosition-1)
+    list removeAll()
+    data filter {_ ⊇ s} foreach {list add _}
+    list getItemCount()
   }
+  val drawCaretStamp = () => {
+    if (search() == 0) hide()
+    else {
+      gc fillRectangle img.getBounds
+      gc drawLine(tbox.getCaretLocation.x, 0, tbox.getCaretLocation.x, tbox.getSize.y)
+      tbox setBackgroundImage null
+      tbox setBackgroundImage img
+    }
+  }
+
   shell setLayout new FillLayout
   shell setSize(200, 100)
 
   tbox addModifyListener(new ModifyListener {
     def modifyText(e: ModifyEvent) {
-      if (!shell.isVisible) {
+      if (!shell.isVisible && search() > 0) {
         shell setLocation(tbox.toDisplay(0, 0).x, tbox.toDisplay(0, 0).y + tbox.getSize.y + 5)
         shell open()
       }
@@ -71,7 +82,7 @@ class ExtendedSearch(tbox: Text) {
           drawCaretStamp()
           e.doit = false
         }
-        case _ => if (e.character.toString !== "") {
+        case _ => if (e.character.toString !≅ "") {
           tbox insert e.character.toString
           drawCaretStamp()
           e.doit = false
@@ -95,7 +106,7 @@ class ExtendedSearch(tbox: Text) {
     }
   })
 
-  def addData(searchedData: List[String]) {
+  def setSearch(searchedData: List[String]) {
     data ++= searchedData
     data foreach {list add _}
     if (data.size > 0)
