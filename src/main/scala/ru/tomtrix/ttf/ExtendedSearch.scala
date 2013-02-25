@@ -2,6 +2,7 @@ package ru.tomtrix.ttf
 
 import scala.List
 import collection.mutable.ArrayBuffer
+import ExtendedString._
 import org.eclipse.swt.events._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
@@ -70,7 +71,7 @@ class ExtendedSearch(tbox: Text) {
           drawCaretStamp()
           e.doit = false
         }
-        case _ => if (!e.character.toString.trim.isEmpty) {
+        case _ => if (e.character.toString !== "") {
           tbox insert e.character.toString
           drawCaretStamp()
           e.doit = false
