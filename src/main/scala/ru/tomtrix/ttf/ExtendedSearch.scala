@@ -31,7 +31,7 @@ class ExtendedSearch(tbox: Text) {
   val search = () => {
     val s = tbox getText(0, tbox.getCaretPosition-1)
     list removeAll()
-    data filter {_ ⊇ s} foreach {list add _}
+    data filter {_ ⊃ s} foreach {list add _}
     list getItemCount()
   }
   val drawCaretStamp = () => {
@@ -82,7 +82,7 @@ class ExtendedSearch(tbox: Text) {
           drawCaretStamp()
           e.doit = false
         }
-        case _ => if (e.character.toString !≅ "") {
+        case _ => if (e.character.toString ≉ "") {
           tbox insert e.character.toString
           drawCaretStamp()
           e.doit = false

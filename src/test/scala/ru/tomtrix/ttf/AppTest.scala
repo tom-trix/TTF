@@ -11,10 +11,10 @@ class AppTest extends FeatureSpec with GivenWhenThen {
     scenario("given different non-null strings") {
       var a = "hello"
       var b = "hello"
-      assert(a ≅ b)
+      assert(a ≈ b)
 
       b = " HeLLo   "
-      assert(a ≅ b)
+      assert(a ≈ b)
     }
   }
 }

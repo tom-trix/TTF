@@ -10,7 +10,7 @@ class ExtendedString(source: String) {
    * @param that fsefse
    * @return drgfes
    */
-  def ≅(that: String) = {
+  def ≈(that: String) = {
     val x = if (source == null || source == None) "" else source.trim.toLowerCase
     val y = if (that == null || that == None) "" else that.trim.toLowerCase
     x equals y
@@ -21,9 +21,9 @@ class ExtendedString(source: String) {
    * @param that fsefse
    * @return htrhgwe
    */
-  def !≅(that: String) = !(≅(that))
+  def ≉(that: String) = !(≈(that))
 
-  def ⊇(that: String) = {
+  def ⊃(that: String) = {
     val x = if (source == null || source == None) "" else source.trim.toLowerCase
     val y = if (that == null || that == None) "" else that.trim.toLowerCase
     x contains y
@@ -34,7 +34,7 @@ class ExtendedString(source: String) {
    * @param that esg
    * @return gdrgr
    */
-  def !⊇(that: String) = !(⊇(that))
+  def ⊅(that: String) = !(⊃(that))
 }
 
 /**
