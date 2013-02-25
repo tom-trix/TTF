@@ -1,13 +1,13 @@
 package ru.tomtrix.ttf
 
 import scala.List
-import collection.mutable.ArrayBuffer
-import ExtendedString._
+import scala.collection.mutable.ArrayBuffer
+import ru.tomtrix.ttf.ExtendedString._
 import org.eclipse.swt.events._
+import org.eclipse.swt.widgets._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.graphics.{Image, GC}
-import widgets._
 
 
 /**

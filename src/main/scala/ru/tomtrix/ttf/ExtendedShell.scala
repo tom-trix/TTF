@@ -1,8 +1,9 @@
 package ru.tomtrix.ttf
 
-import SWTWrappers._
 import org.eclipse.swt.events._
 import org.eclipse.swt.widgets.Shell
+import ru.tomtrix.ttf.I18n._
+import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.patterns.SafeCode._
 
 /**
@@ -15,7 +16,7 @@ class ExtendedShell(source: Shell) {
    * @param parent fvgse
    */
   def open(parent: Shell) {
-    val mouseListener = new MouseAdapter {override def mouseUp(e: MouseEvent) {showMessage(parent, "Закройте все окна")}}
+    val mouseListener = new MouseAdapter {override def mouseUp(e: MouseEvent) {showMessage(parent, "close.all.windows" ⇉ ExtendedShell.ttfBundle)}}
     source addDisposeListener new DisposeListener {
       def widgetDisposed(x: DisposeEvent) {
         safe {
@@ -35,4 +36,5 @@ class ExtendedShell(source: Shell) {
  */
 object ExtendedShell {
   implicit def toExtendedShell(s: Shell) = new ExtendedShell(s)
+  val ttfBundle = new I18n("ttf")
 }

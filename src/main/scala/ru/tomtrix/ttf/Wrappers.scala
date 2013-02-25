@@ -2,9 +2,9 @@ package ru.tomtrix.ttf
 
 import java.io._
 import org.eclipse.swt.SWT
-import patterns.Disposable._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.graphics._
+import ru.tomtrix.ttf.patterns.Disposable._
 import ru.tomtrix.ttf.patterns.SafeCode._
 
 /**

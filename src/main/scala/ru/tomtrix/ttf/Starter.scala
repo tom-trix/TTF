@@ -1,15 +1,14 @@
 package ru.tomtrix.ttf
 
-import ExtendedShell._
+import ru.tomtrix.ttf.ExtendedShell._
 import org.eclipse.swt.SWT
-import patterns.Disposable._
+import ru.tomtrix.ttf.patterns.Disposable._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.events._
-import patterns.{ActorsManager, Undo, Repository}
+import ru.tomtrix.ttf.patterns.{ActorsManager, Undo, Repository}
 import org.apache.log4j.Logger
-import SWTWrappers._
-import ExtendedSearch._
-import org.eclipse.swt.graphics.{Color, GC, Image}
+import ru.tomtrix.ttf.SWTWrappers._
+import ru.tomtrix.ttf.ExtendedSearch._
 
 object Starter extends App with Undo {
   using(ActorsManager) { g =>
@@ -33,7 +32,7 @@ object Starter extends App with Undo {
       t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
       t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
       t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))
-      println("count = %d" format t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1))
+      println(s"count = ${t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1)}")
     }
     val display = new Display
     showSplashScreenFunc("images.jpg", errorText = "Loading") { t =>

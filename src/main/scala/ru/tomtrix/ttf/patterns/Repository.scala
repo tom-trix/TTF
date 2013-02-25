@@ -1,8 +1,8 @@
 package ru.tomtrix.ttf.patterns
 
-import SafeCode._
 import java.sql.DriverManager
-import collection.mutable.ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.{MYSQL, SQLITE, DBMS}
 import ru.tomtrix.ttf.patterns.Disposable._
 
@@ -13,7 +13,7 @@ class Repository(db: String)(dbms: DBMS) {
   val connection = dbms match {
     case SQLITE => {
       Class forName "org.sqlite.JDBC"
-      DriverManager.getConnection("jdbc:sqlite:%s" format db)
+      DriverManager.getConnection(s"jdbc:sqlite:$db")
     }
     case MYSQL => {
       throw new NotImplementedError

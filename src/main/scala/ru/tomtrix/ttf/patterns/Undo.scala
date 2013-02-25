@@ -1,7 +1,7 @@
 package ru.tomtrix.ttf.patterns
 
 import java.util
-import collection.mutable
+import scala.collection.mutable
 
 /**
  * egsge

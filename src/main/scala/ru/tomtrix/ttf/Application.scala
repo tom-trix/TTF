@@ -1,6 +1,6 @@
 package ru.tomtrix.ttf
 
-import patterns.Disposable
+import ru.tomtrix.ttf.patterns.Disposable
 
 /**
  * fsefse
