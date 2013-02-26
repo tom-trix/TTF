@@ -16,7 +16,7 @@ class ExtendedShell(source: Shell) {
    * @param parent fvgse
    */
   def open(parent: Shell) {
-    val mouseListener = new MouseAdapter {override def mouseUp(e: MouseEvent) {showMessage(parent, "close.all.windows" ⇉ ExtendedShell.ttfBundle)}}
+    val mouseListener = new MouseAdapter {override def mouseUp(e: MouseEvent) {showMessage(parent, ttf"close.all.windows")}}
     source addDisposeListener new DisposeListener {
       def widgetDisposed(x: DisposeEvent) {
         safe {

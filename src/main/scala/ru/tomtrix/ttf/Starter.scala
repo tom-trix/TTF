@@ -1,5 +1,6 @@
 package ru.tomtrix.ttf
 
+import ru.tomtrix.ttf.I18n._
 import ru.tomtrix.ttf.ExtendedShell._
 import org.eclipse.swt.SWT
 import ru.tomtrix.ttf.patterns.Disposable._
@@ -43,6 +44,9 @@ object Starter extends App with Undo {
     val gt = new Text(shell, SWT.BORDER)
     gt.setLocation(30, 30)
     gt.setSize(130, 22)
+
+    I18n.setDefaultBundle(new I18n("ttf_ru"))
+    showMessage(shell, i"what.a.fuck")
 
     /*val f = new Text(shell, SWT.SEARCH | SWT.ICON_SEARCH)
     f.setBounds(20, 30, 120, 125)
