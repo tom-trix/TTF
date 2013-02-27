@@ -45,8 +45,8 @@ object Starter extends App with Undo {
     gt.setLocation(30, 30)
     gt.setSize(130, 22)
 
-    I18n.setDefaultBundle(new I18n("ttf_ru"))
-    showMessage(shell, i"what.a.fuck${5}${5+5}")
+    I18n.setDefaultBundle(new I18n("std_ru"))
+    showMessage(shell, i"what.a.fuck${5}${5+5}" + " " + i125"what.a.suck${131}")
 
     /*val f = new Text(shell, SWT.SEARCH | SWT.ICON_SEARCH)
     f.setBounds(20, 30, 120, 125)
