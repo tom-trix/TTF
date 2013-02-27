@@ -1,7 +1,8 @@
 package ru.tomtrix.ttf
 
-import java.util.ResourceBundle
 import ru.tomtrix.ttf.patterns.SafeCode._
+import java.text.MessageFormat
+import java.util.ResourceBundle
 
 /**
  * grggdp
@@ -20,6 +21,13 @@ object I18n {
   private var defaultBundle: I18n = null
   private var ttfBundle = new I18n("ttf_ru")
 
+  val format = (sc: StringContext, i18n: I18n, args: Seq[AnyRef]) => safe {
+    val s = sc.parts.foldLeft("") {(a, b) => s"$a$b"}
+    val z = for {value <- i18n.bundle map {_ getString s}}
+            yield MessageFormat.format(value, args: _*)
+    z getOrElse "error"
+  } getOrElse "error"
+
   def setDefaultBundle(x: I18n) {
     defaultBundle = x
   }
@@ -33,13 +41,9 @@ object I18n {
    * @param sc fse
    */
   implicit class I18nInterpoler(val sc: StringContext) extends AnyVal {
-    def i(args: Any*): String = safe {
-      defaultBundle.bundle map {_ getString sc.s()} getOrElse sc.s()
-    } getOrElse sc.s()
+    def i(args: Any*): String = format(sc, defaultBundle, args map {_ toString()})
 
-    def ttf(args: Any*): String = safe {
-      ttfBundle.bundle map {_ getString sc.s()} getOrElse sc.s()
-    } getOrElse sc.s()
+    def ttf(args: Any*): String = format(sc, ttfBundle, args map {_ toString()})
   }
 }
 
