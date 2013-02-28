@@ -37,6 +37,15 @@ object Wrappers {
       }
     }
   }
+
+  def isWhole(x: Number) =
+    x.isInstanceOf[Byte] || x.isInstanceOf[Short] || x.isInstanceOf[Int] || x.isInstanceOf[Long] || x.equals(x.longValue())
+
+  def isWhole(x: Any) = x.isInstanceOf[Number] && isWhole(x.asInstanceOf[Number])
+
+  def isFractional(x: Number) = (x.isInstanceOf[Float] || x.isInstanceOf[Double]) && !x.equals(x.longValue())
+
+  def isFractional(x: Any) = x.isInstanceOf[Number] && isFractional((x.asInstanceOf[Number]))
 }
 
 object SWTWrappers {
