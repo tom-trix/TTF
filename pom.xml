@@ -63,8 +63,8 @@
     <!-- Scala test library -->
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.9.0</artifactId>
-      <version>1.9.1</version>
+      <artifactId>scalatest_2.10</artifactId>
+      <version>2.0.M6-SNAP8</version>
     </dependency>
     <!-- SWT Win64 libraries -->
     <dependency>
