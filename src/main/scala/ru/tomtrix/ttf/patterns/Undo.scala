@@ -9,13 +9,13 @@ import scala.collection.mutable
 trait Undo extends mutable.Undoable {
   type Cmd = (() => Any, () => Any)
 
-  val undoStack = new util.ArrayDeque[Cmd]()
-  val redoStack = new util.ArrayDeque[Cmd]()
-  var size = 100
+  private val undoStack = new util.ArrayDeque[Cmd]()
+  private val redoStack = new util.ArrayDeque[Cmd]()
+  var stackSize = 100
 
   private def push(cmd: Cmd) {
     undoStack push cmd
-    if (undoStack.size > size)
+    if (undoStack.size > stackSize)
       undoStack pollLast()
   }
 
@@ -27,6 +27,11 @@ trait Undo extends mutable.Undoable {
   def doCommand(funcDo: => Any, funcUndo: => Any) {
     funcDo
     push (() => funcDo, () => funcUndo)
+  }
+
+  def doChangeState[T](oldVal: T, newVal: T, setter: (T) => Unit) {
+    setter(newVal)
+    push(() => setter(newVal), () => setter(oldVal))
   }
 
   /**

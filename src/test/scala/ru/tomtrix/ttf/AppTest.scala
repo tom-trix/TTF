@@ -5,7 +5,7 @@ import ru.tomtrix.ttf.SQLITE
 import ru.tomtrix.ttf.ExtendedString._
 import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.patterns.Disposable._
-import ru.tomtrix.ttf.patterns.{Repository, ActorsManager}
+import ru.tomtrix.ttf.patterns.{Undo, Repository, ActorsManager}
 
 class AppTest extends FeatureSpec with GivenWhenThen {
 
@@ -114,6 +114,80 @@ class AppTest extends FeatureSpec with GivenWhenThen {
       var x = 1
       safe({x = 2}, {x = 0})
       expectResult(0)(x)
+    }
+  }
+
+  feature("Undo") {
+    info("Undo is a classic CTRL-Z pattern")
+    scenario("test doCommand()") {
+      val obj = new Object with Undo
+      var s = "test"
+      obj.doCommand({s = s toUpperCase()}, {s = s toLowerCase()})
+      expectResult("TEST")(s)
+      obj.undo()
+      expectResult("test")(s)
+      obj.redo()
+      expectResult("TEST")(s)
+      obj.undo()
+      obj.undo()
+      obj.undo()
+      obj.undo()
+      expectResult("test")(s)
+    }
+    scenario("test doChangeState()") {
+      val obj = new Object with Undo
+      var s = "test"
+      val cmds = List("00", "11", "22", "33", "44", "55")
+      cmds foreach {t => obj.doChangeState(s, t, (x:String) => s = x)}
+      expectResult("55")(s)
+      obj.undo()
+      expectResult("44")(s)
+      obj.undo()
+      expectResult("33")(s)
+      obj.redo()
+      expectResult("44")(s)
+      obj.undo()
+      expectResult("33")(s)
+      obj.undo()
+      expectResult("22")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.undo()
+      expectResult("00")(s)
+      obj.undo()
+      expectResult("test")(s)
+      obj.undo()
+      expectResult("test")(s)
+      obj.undo()
+      expectResult("test")(s)
+      obj.redo()
+      expectResult("00")(s)
+    }
+    scenario("test the stack size") {
+      val obj = new Object with Undo
+      obj.stackSize = 4
+      var s = "test"
+      val cmds = List("00", "11", "22", "33", "44", "55")
+      cmds foreach {t => obj.doChangeState(s, t, (x:String) => s = x)}
+      expectResult("55")(s)
+      obj.undo()
+      expectResult("44")(s)
+      obj.undo()
+      expectResult("33")(s)
+      obj.undo()
+      expectResult("22")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.undo()
+      expectResult("11")(s)
+      obj.redo()
+      expectResult("22")(s)
     }
   }
 }
