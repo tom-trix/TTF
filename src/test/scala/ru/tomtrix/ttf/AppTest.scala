@@ -3,8 +3,9 @@ import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
 import ru.tomtrix.ttf.SQLITE
 import ru.tomtrix.ttf.ExtendedString._
-import ru.tomtrix.ttf.patterns.{Repository, ActorsManager}
+import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.patterns.Disposable._
+import ru.tomtrix.ttf.patterns.{Repository, ActorsManager}
 
 class AppTest extends FeatureSpec with GivenWhenThen {
 
@@ -92,6 +93,27 @@ class AppTest extends FeatureSpec with GivenWhenThen {
         val mySon = db.getValue[String]("SELECT name FROM Childs WHERE age < ", Seq(11))
         expectResult(None)(mySon)
       }
+    }
+  }
+
+  feature("SafeCode") {
+    info("SafeCode is a pattern that makes try-catch-finally code shorter (like tryo in Lift)")
+    scenario("test a safe code") {
+      val a = safe {
+        1 + 4/2
+      }
+      expectResult(3)(a.getOrElse(-1))
+    }
+    scenario("test an unsafe code") {
+      val a = safe {
+        1 + 4/0
+      }
+      expectResult(-1)(a.getOrElse(-1))
+    }
+    scenario("test finally block") {
+      var x = 1
+      safe({x = 2}, {x = 0})
+      expectResult(0)(x)
     }
   }
 }
