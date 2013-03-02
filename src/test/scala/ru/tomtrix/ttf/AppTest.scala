@@ -9,8 +9,8 @@ import ru.tomtrix.ttf.patterns.{Undo, Repository, ActorsManager}
 
 class AppTest extends FeatureSpec with GivenWhenThen {
 
-  feature("Extended String") {
-    info("Extended strings manage the troubles related to NULL, non-trim and case-sensitive strings")
+  feature("ExtendedString") {
+    info("Testing ExtendedString")
     scenario("let's compare 2 strings") {
       expectResult(true)("hello" ≈ "hello")
       expectResult(true)("hello" ≈ "   hello   ")
@@ -23,8 +23,8 @@ class AppTest extends FeatureSpec with GivenWhenThen {
     }
   }
 
-  feature("Disposable trait") {
-    info("Disposable is intended to close or/and dispose objects")
+  feature("Disposable") {
+    info("Testing Disposable trait")
     scenario("let's test a close() method") {
       val obj = new Object {var x = true; def close() {x = false} }
       using(obj) { t =>
@@ -49,7 +49,7 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   }
 
   feature("ActorManager") {
-    info("ActorManager is an Akka-object that uses Disposable feature")
+    info("Testing ActorManager")
     scenario("ensure the ActorManager is being closed after a usage") {
       using(ActorsManager) { t =>
         expectResult(false)(t.system.isTerminated)
@@ -60,9 +60,9 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   }
 
   feature("Repository") {
-    info("Repository is a pattern that provides a database abstraction level")
+    info("Testing Repository")
     scenario("first we gonna test queries") {
-      using(new Repository("ttf.sqlite", SQLITE)) { db =>
+      using(new Repository {val db = "ttf.sqlite"; val dbms = SQLITE}) { db =>
         // clean failed tests
         db.execute("DELETE FROM Children WHERE name = ?", Seq("Test"))
         // come on
@@ -79,7 +79,7 @@ class AppTest extends FeatureSpec with GivenWhenThen {
       }
     }
     scenario("now let's test non-query executions") {
-      using(new Repository("ttf.sqlite", SQLITE)) { db =>
+      using(new Repository {val db = "ttf.sqlite"; val dbms = SQLITE}) { db =>
         db.execute("INSERT INTO Children (name, age) VALUES (?, ?)", Seq("Test", 3))
         expectResult(5)(db.getValue("SELECT COUNT(*) FROM Children").getOrElse(-1))
         db.execute("DELETE FROM Children WHERE age = ?", Seq(3))
@@ -87,7 +87,7 @@ class AppTest extends FeatureSpec with GivenWhenThen {
       }
     }
     scenario("finally let's test the exceptions") {
-      using(new Repository("ttf.sqlite", SQLITE)) { db =>
+      using(new Repository {val db = "ttf.sqlite"; val dbms = SQLITE}) { db =>
         val table = db.getTable("SELECT * FROM Childs")
         expectResult(0)(table.size)
         val mySon = db.getValue[String]("SELECT name FROM Childs WHERE age < ", Seq(11))
@@ -97,7 +97,7 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   }
 
   feature("SafeCode") {
-    info("SafeCode is a pattern that makes try-catch-finally code shorter (like tryo in Lift)")
+    info("Testing SafeCode")
     scenario("test a safe code") {
       val a = safe {
         1 + 4/2
@@ -118,7 +118,7 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   }
 
   feature("Undo") {
-    info("Undo is a classic CTRL-Z pattern")
+    info("Testing Undo")
     scenario("test doCommand()") {
       val obj = new Object with Undo
       var s = "test"
@@ -188,6 +188,41 @@ class AppTest extends FeatureSpec with GivenWhenThen {
       expectResult("11")(s)
       obj.redo()
       expectResult("22")(s)
+    }
+  }
+
+  feature("ExtendedSearch") {
+    info("Testing ExtendedSearch")
+    scenario("") {
+
+    }
+  }
+
+  feature("ExtendedShell") {
+    info("Testing ExtendedShell")
+    scenario("") {
+
+    }
+  }
+
+  feature("I18n") {
+    info("Testing I18n")
+    scenario("") {
+
+    }
+  }
+
+  feature("SWTWrappers") {
+    info("Testing SWTWrappers")
+    scenario("") {
+
+    }
+  }
+
+  feature("Wrappers") {
+    info("Testing Wrappers")
+    scenario("") {
+
     }
   }
 }

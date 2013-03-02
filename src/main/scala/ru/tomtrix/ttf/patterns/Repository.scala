@@ -9,7 +9,9 @@ import ru.tomtrix.ttf.patterns.Disposable._
 /**
  * gr
  */
-class Repository(db: String, dbms: DBMS) {
+trait Repository {
+  val db: String
+  val dbms: DBMS
   lazy val sqlite = {
     Class forName "org.sqlite.JDBC"
     DriverManager.getConnection(s"jdbc:sqlite:$db")

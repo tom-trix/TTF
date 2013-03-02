@@ -12,29 +12,6 @@ import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.ExtendedSearch._
 
 object Starter extends App with Undo {
-  using(ActorsManager) { g =>
-    var s = "abc"
-    doCommand({s = s.toUpperCase}, {s = s.toLowerCase})
-    println(s)
-    undo()
-    println(s)
-    redo()
-    println(s)
-    undo()
-    undo()
-    undo()
-    undo()
-    println(s)
-    redo()
-    println(s)
-
-    Logger.getLogger(getClass).warn("fuck me, baby!")
-    using(new Repository("trix.sqlite", SQLITE)) { t =>
-      t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
-      t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
-      t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))
-      println(s"count = ${t.getValue[Int]("Select count(*) from Children where age < ?", Seq(14)).getOrElse(-1)}")
-    }
     val display = new Display
     showSplashScreenFunc("images.jpg", errorText = "Loading") { t =>
       Thread.sleep(500)
@@ -81,5 +58,4 @@ object Starter extends App with Undo {
       if (!display.readAndDispatch())
         display.sleep
     display.dispose()
-  }
 }
