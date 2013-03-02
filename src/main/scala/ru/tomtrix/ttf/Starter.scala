@@ -29,7 +29,7 @@ object Starter extends App with Undo {
     println(s)
 
     Logger.getLogger(getClass).warn("fuck me, baby!")
-    using(new Repository("trix.sqlite")(SQLITE)) { t =>
+    using(new Repository("trix.sqlite", SQLITE)) { t =>
       t.getTable("Select * from Children where age < ?", Seq(14)) foreach println
       t.getTuple("Select * from Children where age < ?", Seq(14)) foreach println
       t.getAttribute[String]("Select name from Children where age < ?", Seq(14)) foreach (t => println(t))

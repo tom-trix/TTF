@@ -9,15 +9,16 @@ import ru.tomtrix.ttf.patterns.Disposable._
 /**
  * gr
  */
-class Repository(db: String)(dbms: DBMS) {
+class Repository(db: String, dbms: DBMS) {
+  lazy val sqlite = {
+    Class forName "org.sqlite.JDBC"
+    DriverManager.getConnection(s"jdbc:sqlite:$db")
+  }
+
   val connection = dbms match {
-    case SQLITE => {
-      Class forName "org.sqlite.JDBC"
-      DriverManager.getConnection(s"jdbc:sqlite:$db")
-    }
-    case MYSQL => {
-      throw new NotImplementedError
-    }
+    case SQLITE => sqlite
+    case MYSQL => throw new NotImplementedError
+    case _ => sqlite
   }
 
   /**
@@ -40,13 +41,13 @@ class Repository(db: String)(dbms: DBMS) {
    * @param params grsdgdh
    * @return jty
    */
-  def getTable(sql: String, params: Seq[Any]) = {
-    val result = ArrayBuffer[List[(String, Any)]]()
+  def getTable(sql: String, params: Seq[Any] = Nil) = {
+    val result = ArrayBuffer[Map[String, Any]]()
     for { st <- prepare(sql, params) } yield {
       using (st.executeQuery()) { rs =>
-        val columns = (1 to rs.getMetaData.getColumnCount) map {rs.getMetaData.getColumnName(_)}
+        val columns = (1 to rs.getMetaData.getColumnCount) map {rs.getMetaData.getColumnName _}
         while (rs.next())
-          result += ((1 to columns.size).map {p => columns(p-1) -> rs.getObject(p)}.toList)
+          result += (1 to columns.size).map{p => columns(p-1) -> rs.getObject(p)}.toMap
       }
     }
     result.toList
@@ -59,8 +60,8 @@ class Repository(db: String)(dbms: DBMS) {
    * @tparam T hfthf
    * @return seges
    */
-  def getAttribute[T](sql: String, params: Seq[Any]) = {
-    getTable(sql, params) map {_(0)._2.asInstanceOf[T]}
+  def getAttribute[T](sql: String, params: Seq[Any] = Nil) = {
+    getTable(sql, params) map {_.toList(0)._2.asInstanceOf[T]}
   }
 
   /**
@@ -69,10 +70,10 @@ class Repository(db: String)(dbms: DBMS) {
    * @param params gsegse
    * @return gdgs
    */
-  def getTuple(sql: String, params: Seq[Any]) = {
+  def getTuple(sql: String, params: Seq[Any] = Nil) = {
     val result = getTable(sql, params)
     if (result.size > 0) result(0)
-    else List()
+    else Map.empty[String, Any]
   }
 
   /**
@@ -82,7 +83,7 @@ class Repository(db: String)(dbms: DBMS) {
    * @tparam T gsfges
    * @return gseges
    */
-  def getValue[T](sql: String, params: Seq[Any]) = {
+  def getValue[T](sql: String, params: Seq[Any] = Nil) = {
     val result = getAttribute[T](sql, params)
     if (result.size > 0) Some(result(0))
     else None
@@ -93,7 +94,7 @@ class Repository(db: String)(dbms: DBMS) {
    * @param sql esgg
    * @param params fawf
    */
-  def execute(sql: String, params: Seq[Any]) {
+  def execute(sql: String, params: Seq[Any] = Nil) {
     prepare(sql, params) foreach {_.execute()}
   }
 

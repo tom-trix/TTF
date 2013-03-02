@@ -5,8 +5,8 @@ package ru.tomtrix.ttf
  */
 abstract sealed class DBMS
 
-object SQLITE extends DBMS
-object MYSQL extends DBMS
+case object SQLITE extends DBMS
+case object MYSQL extends DBMS
 
 object Keyboard {
   val BACKSPACE = 8
