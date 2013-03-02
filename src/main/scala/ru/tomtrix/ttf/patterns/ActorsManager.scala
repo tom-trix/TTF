@@ -8,6 +8,9 @@ import akka.actor.ActorSystem
 object ActorsManager {
   val system = ActorSystem("TrixSystem")
 
+  /**
+   * use "using" instead
+   */
   def close() {
     system shutdown()
   }
