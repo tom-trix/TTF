@@ -9,7 +9,8 @@ import org.eclipse.swt.events._
 import ru.tomtrix.ttf.patterns.{ActorsManager, Undo, Repository}
 import org.apache.log4j.Logger
 import ru.tomtrix.ttf.SWTWrappers._
-import ru.tomtrix.ttf.ExtendedSearch._
+import ru.tomtrix.ttf.ExtendedText._
+import ru.tomtrix.ttf.ExtendedCombo._
 
 object Starter extends App with Undo {
     val display = new Display
@@ -23,7 +24,7 @@ object Starter extends App with Undo {
     gt.setSize(130, 22)
 
     I18n.setDefaultBundle(new I18n("std_ru"))
-    showMessage(shell, i"what.a.fuck${5}${5+5}" + " " + i125"what.a.suck${131}")
+    //showMessage(shell, i"what.a.fuck${5}${5+5}" + " " + i125"what.a.suck${131}")
 
     /*val f = new Text(shell, SWT.SEARCH | SWT.ICON_SEARCH)
     f.setBounds(20, 30, 120, 125)
@@ -52,7 +53,13 @@ object Starter extends App with Undo {
     })
     lbl.setBounds(100, 200, 60, 23)
 
-    gt.setSearch(scala.List("remove", "removeAll", "move", "moveAll", "rewrite", "rewriteAll"))
+    val c = new Combo(shell, SWT.DROP_DOWN)
+  c.setBounds(40, 80, 160, 23)
+  //c.setContent(Array("remove", "removeAll", "move", "moveAll", "rewrite", "rewriteAll"))
+  //c.setContent(new Repository {val db = "ttf.sqlite"; val dbms = SQLITE}, "SELECT city FROM Cities", "INSERT INTO Cities (city) VALUES (?)")
+
+    //gt.setContent(scala.List("remove", "removeAll", "move", "moveAll", "rewrite", "rewriteAll"), comboStyle = true)
+  gt.setSQLContent(new Repository {val db = "ttf.sqlite"; val dbms = SQLITE}, "SELECT city FROM Cities", "INSERT INTO Cities (city) VALUES (?)", comboStyle = true)
     shell.open()
     while (!shell.isDisposed)
       if (!display.readAndDispatch())

@@ -12,15 +12,13 @@ import ru.tomtrix.ttf.patterns.Disposable._
 trait Repository {
   val db: String
   val dbms: DBMS
-  lazy val sqlite = {
-    Class forName "org.sqlite.JDBC"
-    DriverManager.getConnection(s"jdbc:sqlite:$db")
-  }
 
-  val connection = dbms match {
-    case SQLITE => sqlite
+  lazy val connection = dbms match {
+    case SQLITE => {
+      Class forName "org.sqlite.JDBC"
+      DriverManager.getConnection(s"jdbc:sqlite:$db")
+    }
     case MYSQL => throw new NotImplementedError
-    case _ => sqlite
   }
 
   /**

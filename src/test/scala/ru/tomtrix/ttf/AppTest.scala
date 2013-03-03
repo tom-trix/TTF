@@ -191,8 +191,8 @@ class AppTest extends FeatureSpec with GivenWhenThen {
     }
   }
 
-  feature("ExtendedSearch") {
-    info("Testing ExtendedSearch")
+  feature("ExtendedText") {
+    info("Testing ExtendedText")
     scenario("") {
 
     }
