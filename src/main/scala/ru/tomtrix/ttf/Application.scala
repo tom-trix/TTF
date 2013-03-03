@@ -16,10 +16,9 @@ class Application(dbmsname: DBMS, dbname: String, splashname: String, splashtext
         using(new Repository {val db: String = dbname; val dbms: DBMS = dbmsname}) { db =>
           val mainForm = new Shell(display)
           showSplashScreenFuncTime(splashname, text = splashtext, millisec = splashtimeMillis) { splash =>
-            val monitorSize = display.getPrimaryMonitor.getBounds
             mainForm.setSize(500, 350)
             f(mainForm)
-            mainForm.setLocation(monitorSize.width/2 - mainForm.getSize.x/2, monitorSize.height/2 - mainForm.getSize.y/2 - 20)
+            mainForm.setLocation(display.getBounds.width/2 - mainForm.getSize.x/2, display.getBounds.height/2 - mainForm.getSize.y/2 - 20)
           }
           mainForm open()
           while (!mainForm.isDisposed)
