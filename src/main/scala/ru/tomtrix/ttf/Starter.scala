@@ -12,11 +12,11 @@ import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.ExtendedText._
 import org.eclipse.swt.graphics.Color
 
-object Starter extends Application(SQLITE, "trix.sqlite")(
+object Starter extends Application(SQLITE, "trix.sqlite", "splash.jpg", "Loading", 1000)(
   (x: Shell) => x.setBackground(new Color(Display.getDefault, 230, 120, 120))
 )
     /*val display = new Display
-    showSplashScreenFunc("images.jpg", errorText = "Loading") { t =>
+    showSplashScreenFunc("images.jpg", text = "Loading") { t =>
       Thread.sleep(500)
     }
     val shell = new Shell(display)
