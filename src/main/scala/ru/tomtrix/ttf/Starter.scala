@@ -10,10 +10,12 @@ import ru.tomtrix.ttf.patterns.{ActorsManager, Undo, Repository}
 import org.apache.log4j.Logger
 import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.ExtendedText._
-import ru.tomtrix.ttf.ExtendedCombo._
+import org.eclipse.swt.graphics.Color
 
-object Starter extends App with Undo {
-    val display = new Display
+object Starter extends Application(SQLITE, "trix.sqlite")(
+  (x: Shell) => x.setBackground(new Color(Display.getDefault, 230, 120, 120))
+)
+    /*val display = new Display
     showSplashScreenFunc("images.jpg", errorText = "Loading") { t =>
       Thread.sleep(500)
     }
@@ -65,4 +67,4 @@ object Starter extends App with Undo {
       if (!display.readAndDispatch())
         display.sleep
     display.dispose()
-}
+}*/
