@@ -1,13 +1,14 @@
 package ru.tomtrix.ttf
 
 import ru.tomtrix.ttf.ExtendedString._
+import ru.tomtrix.ttf.patterns.SafeCode._
 import scala.collection.mutable.ArrayBuffer
 import org.eclipse.swt.events._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.graphics.{Image, GC}
-import ru.tomtrix.ttf.patterns.{Repository, ActorsManager}
+import patterns.{Akka, Repository}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits._
 
@@ -23,6 +24,7 @@ class ExtendedText(tbox: Text) {
   private val gc = new GC(img)
   private var data = ArrayBuffer[String]()
   private var rep: Repository = _
+  private var akka: Akka = _
   private var select: String = _
   private var insert: String = _
 
@@ -96,12 +98,14 @@ class ExtendedText(tbox: Text) {
     override def focusLost(e: FocusEvent) {
       val txt = tbox.getText.trim
       if (rep != null && (txt ≉ "") && !data.contains(txt))
-        ActorsManager.system.scheduler.scheduleOnce(500 milliseconds) {
-          SWTWrappers.invokeAsynch {
-            if (Display.getDefault.getActiveShell != shell && !tbox.isFocusControl) {
-              println("Add new data")
-              rep.execute(insert, Seq(txt))
-              reloadData(rep.getAttribute[String](select))
+        safe {
+          akka.system.scheduler.scheduleOnce(500 milliseconds) {
+            SWTWrappers.invokeAsynch {
+              if (Display.getDefault.getActiveShell != shell && !tbox.isFocusControl) {
+                println("Add new data")
+                rep.execute(insert, Seq(txt))
+                reloadData(rep.getAttribute[String](select))
+              }
             }
           }
         }
@@ -150,13 +154,15 @@ class ExtendedText(tbox: Text) {
     list setItems data.toArray
   }
 
-  def setContent(content: Seq[String], comboStyle: Boolean = false) {
+  def setContent(content: Seq[String], akkaManager: Akka, comboStyle: Boolean = false) {
+    akka = akkaManager
     reloadData(content)
     if (!comboStyle) btn setVisible false
   }
 
-  def setSQLContent(repository: Repository, selectSQL: String, insertSQL: String, comboStyle: Boolean = false) {
+  def setSQLContent(repository: Repository, selectSQL: String, insertSQL: String, akkaManager: Akka, comboStyle: Boolean = false) {
     rep = repository
+    akka = akkaManager
     select = selectSQL
     insert = insertSQL
     reloadData(repository.getAttribute[String](selectSQL))

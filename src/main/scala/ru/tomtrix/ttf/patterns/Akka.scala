@@ -5,13 +5,15 @@ import akka.actor.ActorSystem
 /**
  * use it with "Using"
  */
-object ActorsManager {
-  val system = ActorSystem("TrixSystem")
+trait Akka {
+  val name: String
+  lazy val system = ActorSystem(name)
 
   /**
    * use "using" instead
    */
   def close() {
     system shutdown()
+    println("Akka closed")
   }
 }

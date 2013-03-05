@@ -5,7 +5,7 @@ import ru.tomtrix.ttf.SQLITE
 import ru.tomtrix.ttf.ExtendedString._
 import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.patterns.Disposable._
-import ru.tomtrix.ttf.patterns.{Undo, Repository, ActorsManager}
+import ru.tomtrix.ttf.patterns.{Akka, Undo, Repository}
 
 class AppTest extends FeatureSpec with GivenWhenThen {
 
@@ -51,11 +51,12 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   feature("ActorManager") {
     info("Testing ActorManager")
     scenario("ensure the ActorManager is being closed after a usage") {
-      using(ActorsManager) { t =>
+      val akka = new Akka {val name: String = "test"}
+      using(akka) { t =>
         expectResult(false)(t.system.isTerminated)
       }
       Thread.sleep(500)
-      expectResult(true)(ActorsManager.system.isTerminated)
+      expectResult(true)(akka.system.isTerminated)
     }
   }
 
