@@ -1,9 +1,8 @@
 .idea/*
-launch4j/*
 target/classes/ru/*
 target/test-classes/*
 *.iml
 *.log
 *.jpg
 *.jar
-*.sqlite
+*.exe
