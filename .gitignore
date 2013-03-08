@@ -1,4 +1,5 @@
 .idea/*
+launch4j/*
 target/classes/ru/*
 target/test-classes/*
 *.iml
