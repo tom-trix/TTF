@@ -6,15 +6,33 @@ import org.eclipse.swt.SWT
 import ru.tomtrix.ttf.patterns.Disposable._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.events._
-import ru.tomtrix.ttf.patterns.{ActorsManager, Undo, Repository}
+import ru.tomtrix.ttf.patterns.{Akka, Undo, Repository}
 import org.apache.log4j.Logger
 import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.ExtendedText._
 import org.eclipse.swt.graphics.Color
+import Exploit._
+import ru.tomtrix.ttf.patterns.SafeCode._
 
-object Starter extends Application(SQLITE, "trix.sqlite", "splash.jpg", "Loading", 1000)(
+/*object Starter extends Application(SQLITE, "trix.sqlite", "splash.jpg", "Loading", 1000)(
   (x: Shell) => x.setBackground(new Color(Display.getDefault, 230, 120, 120))
-)
+)*/
+
+object Starter extends App {
+  safe {
+    exploitAkka("trix") { akka =>
+      exploitDb(SQLITE, "ttf.sqlite") { db =>
+        exploitForm("Fuck") { form =>
+          exploitSplash("images.jpg", "", 1000) { splash =>
+            form.setBackground(new Color(Display.getDefault, 100, 200, 100))
+            println(db.execute("SELECT COUNT(*) FROM Children"))
+          }
+        }
+      }
+    }
+  }
+}
+
     /*val display = new Display
     showSplashScreenFunc("images.jpg", text = "Loading") { t =>
       Thread.sleep(500)
