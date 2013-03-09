@@ -1,4 +1,4 @@
-package ru.tomtrix.ttf
+package ru.tomtrix.ttf.controls
 
 import ru.tomtrix.ttf.ExtendedString._
 import ru.tomtrix.ttf.patterns.SafeCode._
@@ -8,9 +8,10 @@ import org.eclipse.swt.widgets._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.graphics.{Image, GC}
-import patterns.{Akka, Repository}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits._
+import ru.tomtrix.ttf.{SWTWrappers, Keyboard}
+import ru.tomtrix.ttf.patterns.{Akka, Repository}
 
 
 /**
@@ -26,7 +27,7 @@ class ExtendedText(tbox: Text) {
   private var rep: Repository = _
   private var akka: Akka = _
   private var select: String = _
-  private var insert: String = _
+  private var insert: Option[String] = _
 
   shell setLayout new FillLayout
   shell setSize(200, 100)
@@ -97,13 +98,13 @@ class ExtendedText(tbox: Text) {
   tbox addFocusListener(new FocusAdapter {
     override def focusLost(e: FocusEvent) {
       val txt = tbox.getText.trim
-      if (rep != null && (txt ≉ "") && !data.contains(txt))
+      if (rep != null && insert!=None && (txt ≉ "") && !data.contains(txt))
         safe {
           akka.system.scheduler.scheduleOnce(500 milliseconds) {
             SWTWrappers.invokeAsynch {
               if (Display.getDefault.getActiveShell != shell && !tbox.isFocusControl) {
                 println("Add new data")
-                rep.execute(insert, Seq(txt))
+                rep.execute(insert.get, Seq(txt))
                 reloadData(rep.getAttribute[String](select))
               }
             }
@@ -154,13 +155,13 @@ class ExtendedText(tbox: Text) {
     list setItems data.toArray
   }
 
-  def setContent(content: Seq[String], akkaManager: Akka, comboStyle: Boolean = false) {
+  def setContent(akkaManager: Akka, content: Seq[String], comboStyle: Boolean = false) {
     akka = akkaManager
     reloadData(content)
     if (!comboStyle) btn setVisible false
   }
 
-  def setSQLContent(repository: Repository, selectSQL: String, insertSQL: String, akkaManager: Akka, comboStyle: Boolean = false) {
+  def setSQLContent(akkaManager: Akka, repository: Repository, selectSQL: String, insertSQL: Option[String], comboStyle: Boolean = false) {
     rep = repository
     akka = akkaManager
     select = selectSQL

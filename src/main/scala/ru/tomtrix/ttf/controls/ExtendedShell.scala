@@ -1,7 +1,8 @@
-package ru.tomtrix.ttf
+package ru.tomtrix.ttf.controls
 
 import org.eclipse.swt.events._
 import org.eclipse.swt.widgets.Shell
+import ru.tomtrix.ttf.I18n
 import ru.tomtrix.ttf.I18n._
 import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.patterns.SafeCode._
