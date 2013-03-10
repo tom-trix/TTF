@@ -37,7 +37,7 @@ object I18n {
    * @param sc ewfew
    * @return wergwer
    */
-  private def fuse(sc: StringContext) = sc.parts.foldLeft("") {(a, b) => s"${a}$b"}
+  private def fuse(sc: StringContext) = sc.parts.mkString
 
   /**
    * fenslkfnse

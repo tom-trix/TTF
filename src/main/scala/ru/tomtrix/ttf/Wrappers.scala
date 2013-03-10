@@ -6,8 +6,10 @@ import scala.compat.Platform
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.graphics._
-import ru.tomtrix.ttf.patterns.Disposable._
+import org.eclipse.swt.events.{SelectionAdapter, SelectionEvent}
+import ru.tomtrix.ttf.Controls._
 import ru.tomtrix.ttf.patterns.SafeCode._
+import ru.tomtrix.ttf.patterns.Disposable._
 
 /**
  * gre
@@ -63,6 +65,44 @@ object SWTWrappers {
   }
 
   /**
+   * fnseifnsefefse
+   * @param parent gdrg
+   * @param style sdrgs
+   * @param text ffs
+   * @param onClick gfwerge
+   * @return gre
+   */
+  def createButton(parent: Shell, style: Int, text: String)(onClick: => Unit): Button = {
+    val btn = new Button(parent, style)
+    btn setText text
+    btn.setBounds(0, 0, BTN_WIDTH, BTN_HEIGHT)
+    btn addSelectionListener new SelectionAdapter {
+      override def widgetSelected(e: SelectionEvent) {
+        onClick
+      }
+    }
+    btn
+  }
+
+  /**
+   * ndrkngkdrnggrgr
+   * @param parent regre
+   * @param style rfgr
+   * @param text fweg
+   * @param x feg
+   * @param y fwefe
+   * @param width gwergr
+   * @param height grege
+   * @param onClick greg
+   * @return regregre
+   */
+  def createButton(parent: Shell, style: Int, text: String, x: Int, y: Int, width: Int = BTN_WIDTH, height: Int = BTN_HEIGHT)(onClick: => Unit): Button = {
+    val btn = createButton(parent, style, text)(onClick)
+    btn setBounds(x, y, width, height)
+    btn
+  }
+
+  /**
    * nvgsonvgsrvgr
    * @param func gse
    */
@@ -83,11 +123,10 @@ object SWTWrappers {
    */
   def showSplashScreen(filename: String, size: (Int, Int) = (480, 320), text: String = "") = {
     // shell properties
-    val screenSize = Display.getDefault.getPrimaryMonitor.getBounds
     val shell = new Shell(Display getDefault, SWT.ON_TOP | SWT.APPLICATION_MODAL)
     shell setAlpha 220
     shell setSize(size._1, size._2)
-    shell setLocation(screenSize.width/2-shell.getSize.x/2, screenSize.height/2-(shell.getSize.y/1.5).toInt)
+    putToCenter(shell)
     // try to load an image
     val img = safe {resizeImage(new Image(Display getDefault, filename), size._1, size._2)}
     shell setBackgroundImage(img.getOrElse(new Image(Display getDefault, size._1, size._2)))
@@ -153,5 +192,10 @@ object SWTWrappers {
         result
       }
     }
+  }
+
+  def putToCenter(shell: Shell) {
+    val screenSize = Display.getDefault.getBounds
+    shell setLocation(screenSize.width/2-shell.getSize.x/2, screenSize.height/2-(shell.getSize.y/1.5).toInt)
   }
 }

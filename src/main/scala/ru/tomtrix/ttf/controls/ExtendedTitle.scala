@@ -10,16 +10,17 @@ import org.eclipse.swt.widgets.{Control, Group}
  */
 class ExtendedTitle(control: Control) {
   /**
-   * nfseonfse
+    * nfseonfse
    * @param s fsefse
    */
-  def setTitle(s: String) {
+  def setTitle(s: String) = {
     val gbox = new Group(control getParent, SWT.NONE)
-    gbox setLayout new FillLayout()
     gbox setText s
+    gbox setLayout new FillLayout()
     control setParent gbox
     gbox setLocation control.getLocation
     gbox setSize gbox.computeSize(control.getSize.x, SWT.DEFAULT, false)
+    gbox
   }
 }
 
