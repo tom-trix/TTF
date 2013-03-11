@@ -2,7 +2,7 @@ import org.eclipse.swt.widgets.Display
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
 import ru.tomtrix.ttf.SQLITE
-import ru.tomtrix.ttf.ExtendedString._
+import ru.tomtrix.ttf.Implicits._
 import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.patterns.Disposable._
 import ru.tomtrix.ttf.patterns.{Akka, Undo, Repository}
@@ -12,14 +12,14 @@ class AppTest extends FeatureSpec with GivenWhenThen {
   feature("ExtendedString") {
     info("Testing ExtendedString")
     scenario("let's compare 2 strings") {
-      expectResult(true)("hello" ≈ "hello")
-      expectResult(true)("hello" ≈ "   hello   ")
-      expectResult(true)("hello" ≈ "   HELLO   ")
-      expectResult(true)("  HeLLo" ≈ "   HELLO   ")
-      expectResult(true)("  " ≈ "")
-      expectResult(true)("  " ≈ null)
-      expectResult(true)("_" ≉ " ")
-      expectResult(false)("_" ≈ " ")
+      expectResult(true)("hello" === "hello")
+      expectResult(true)("hello" === "   hello   ")
+      expectResult(true)("hello" === "   HELLO   ")
+      expectResult(true)("  HeLLo" === "   HELLO   ")
+      expectResult(true)("  " === "")
+      expectResult(true)("  " === null)
+      expectResult(true)("_" !== " ")
+      expectResult(false)("_" !== " ")
     }
   }
 

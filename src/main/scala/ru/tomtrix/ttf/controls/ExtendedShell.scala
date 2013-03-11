@@ -4,6 +4,7 @@ import org.eclipse.swt.events._
 import org.eclipse.swt.widgets.Shell
 import ru.tomtrix.ttf.I18n._
 import ru.tomtrix.ttf.SWTWrappers._
+import ru.tomtrix.ttf.Implicits._
 import ru.tomtrix.ttf.patterns.SafeCode._
 
 /**
@@ -35,7 +36,7 @@ class ExtendedShell(source: Shell) {
 
   def pack(margin: Int) {
     source pack()
-    source setSize(source.getSize.x + margin, source.getSize.y +margin)
+    source setSize(source.getSize ++ margin)
     source setMinimumSize source.getSize
   }
 }

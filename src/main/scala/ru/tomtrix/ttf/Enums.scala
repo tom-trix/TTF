@@ -27,6 +27,8 @@ object Controls {
   val BTN_HEIGHT = 28
   val RADIO_WIDTH = 200
   val RADIO_HEIGHT = 100
+  val AUTOCOMPLETE_WIDTH = 200
+  val AUTOCOMPLETE_HEIGHT = 100
   val TEXT_LIMIT = 1 << 14
   val STD_MARGIN = 10
 }

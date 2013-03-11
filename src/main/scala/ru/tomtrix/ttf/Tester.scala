@@ -16,12 +16,11 @@ object Tester extends App {
         exploitForm("Fuck") { form =>
           exploitSplash("splash.jpg", "", 1000) { splash =>
             form.setBackground(new Color(Display.getDefault, 100, 200, 100))
-            val t = new TTFText(form, SWT.BORDER) {left=30; top=30; width = 230}.setTitle("Введите что-то")
-            t.setSQLContent(akka, db, "SELECT city FROM Cities", None)
+            new TTFText(form, SWT.BORDER) {left=30; top=30; width = 230}.setTitle("Введите что-то").setSQLContent(akka, db, "SELECT city FROM Cities", comboStyle = true)
             println(db.getValue[Int]("SELECT COUNT(*) FROM Children"))
             new TTFButton(form, SWT.NONE) {left=60; top=90; text="Go"; onClick= { e =>
               generateForm(form) { sh =>
-                Seq(new TTFText(sh, SWT.BORDER) {message = "Input here"; width = 400}.setTitle("Fuck"),
+                Seq(new TTFText(sh, SWT.BORDER) {message = "Input here"; width = 400}.setTitle("Fuck").setSQLContent(akka, db, "SELECT name FROM Children", comboStyle = true),
                     new TTFText(sh, SWT.BORDER) {message = "Input here"}.setTitle("Suck"))
               }{ result =>
                 println(result)

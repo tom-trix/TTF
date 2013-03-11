@@ -8,7 +8,9 @@ import org.eclipse.swt.widgets._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.graphics.{Image, GC}
-import ru.tomtrix.ttf.ExtendedString._
+import ru.tomtrix.ttf.I18n._
+import ru.tomtrix.ttf.Controls._
+import ru.tomtrix.ttf.Implicits._
 import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.{SWTWrappers, Keyboard}
 import ru.tomtrix.ttf.patterns.{Akka, Repository}
@@ -17,10 +19,11 @@ import ru.tomtrix.ttf.patterns.{Akka, Repository}
 /**
  * fse
  */
-class ExtendedTTFText(tbox: Text) {
+class ExtendedTTFText(ttftext: TTFText) {
+  private val tbox = ttftext.control
   private val shell = new Shell(Display getDefault, SWT.RESIZE | SWT.ON_TOP)
   private val list = new widgets.List(shell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL)
-  private val btn = new Button(tbox.getShell, SWT.ARROW | SWT.DOWN | SWT.BORDER)
+  private val btn = new Button(tbox.getParent, SWT.ARROW | SWT.DOWN)
   private val img = new Image(Display getDefault, tbox getBounds)
   private val gc = new GC(img)
   private var data = ArrayBuffer[String]()
@@ -30,7 +33,7 @@ class ExtendedTTFText(tbox: Text) {
   private var insert: Option[String] = _
 
   shell setLayout new FillLayout
-  shell setSize(200, 100)
+  shell setSize(AUTOCOMPLETE_WIDTH, AUTOCOMPLETE_HEIGHT)
   shell addShellListener(new ShellAdapter {
     override def shellActivated(e: ShellEvent) {
       drawCaretStamp()
@@ -40,8 +43,9 @@ class ExtendedTTFText(tbox: Text) {
     }
   })
 
-  btn.setSize(tbox.getSize.y, tbox.getSize.y)
-  btn.setLocation(tbox.getLocation.x + tbox.getSize.x, tbox.getLocation.y)
+  btn.setSize(tbox.getSize.y-2, tbox.getSize.y-2)
+  btn.setLocation(tbox.getLocation.x + tbox.getSize.x - btn.getSize.x, tbox.getLocation.y+1)
+  btn.moveAbove(tbox)
   btn.addSelectionListener(new SelectionAdapter {
     override def widgetSelected(e: SelectionEvent) {
       list setItems data.toArray
@@ -80,7 +84,7 @@ class ExtendedTTFText(tbox: Text) {
           update()
           e.doit = false
         }
-        case _ => if (e.character.toString ≉ "") {
+        case _ => if (e.character.toString !== "") {
           tbox insert e.character.toString
           update()
           e.doit = false
@@ -98,7 +102,7 @@ class ExtendedTTFText(tbox: Text) {
   tbox addFocusListener(new FocusAdapter {
     override def focusLost(e: FocusEvent) {
       val txt = tbox.getText.trim
-      if (rep != null && insert!=None && (txt ≉ "") && !data.contains(txt))
+      if (rep != null && insert!=None && (txt !== "") && !data.contains(txt))
         safe {
           akka.system.scheduler.scheduleOnce(500 milliseconds) {
             SWTWrappers.invokeAsynch {
@@ -138,7 +142,7 @@ class ExtendedTTFText(tbox: Text) {
 
   private def search() = {
     val s = tbox getText(0, tbox.getCaretPosition-1)
-    list setItems data.filter{_ ⊃ s}.toArray
+    list setItems data.filter{_ comprises s}.toArray
     list getItemCount()
   }
 
@@ -155,19 +159,21 @@ class ExtendedTTFText(tbox: Text) {
     list setItems data.toArray
   }
 
-  def setContent(akkaManager: Akka, content: Seq[String], comboStyle: Boolean = false) {
+  def setContent(akkaManager: Akka, content: Seq[String], comboStyle: Boolean = false) = {
     akka = akkaManager
     reloadData(content)
     if (!comboStyle) btn setVisible false
+    ttftext
   }
 
-  def setSQLContent(akkaManager: Akka, repository: Repository, selectSQL: String, insertSQL: Option[String], comboStyle: Boolean = false) {
+  def setSQLContent(akkaManager: Akka, repository: Repository, selectSQL: String, insertSQL: Option[String] = None, comboStyle: Boolean = false) = {
     rep = repository
     akka = akkaManager
     select = selectSQL
     insert = insertSQL
     reloadData(repository.getAttribute[String](selectSQL))
     if (!comboStyle) btn setVisible false
+    ttftext
   }
 }
 
@@ -175,5 +181,14 @@ class ExtendedTTFText(tbox: Text) {
  * grgsd
  */
 object ExtendedTTFText {
-  implicit def toExtendedTTFText(source: TTFText) = new ExtendedTTFText(source.control)
+  /**
+   * nfseofnsefrgsg
+   * @param source gsrg
+   * @return gsr
+   */
+  implicit def toExtendedTTFText(source: TTFText) = {
+    if (source.control.getSize === (0, 0))
+      throw new IllegalArgumentException(ttf"exceptions.zerosize")
+    new ExtendedTTFText(source)
+  }
 }
