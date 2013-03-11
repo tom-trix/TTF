@@ -14,12 +14,15 @@ class TTFCombo(parent: Composite, style: Int) extends TTFControl {
   var top: Int = 0
 
   var text = ""
+  var items: Seq[Any] = Nil
   var textLimit = TEXT_LIMIT
 
   def getContent = control getText()
 
   override def init() = {
     super.init()
+    control setItems items.map{_.toString}.toArray
+    //setText must be after setItems
     control setText text
     control setTextLimit textLimit
     this

@@ -1,8 +1,8 @@
 package ru.tomtrix.ttf.controls
 
-import ru.tomtrix.ttf.Controls._
 import org.eclipse.swt.widgets.{Button, Composite}
 import org.eclipse.swt.events.{SelectionAdapter, SelectionEvent}
+import ru.tomtrix.ttf.Controls._
 
 /**
  * rge
@@ -15,7 +15,7 @@ class TTFButton(parent: Composite, style: Int) extends TTFControl {
   var top: Int = 0
 
   var text = ""
-  var onClick: (SelectionEvent) => Unit = _
+  var onClick: (SelectionEvent) => Unit = (e: SelectionEvent) => {}
 
   def getContent = control getSelection()
 

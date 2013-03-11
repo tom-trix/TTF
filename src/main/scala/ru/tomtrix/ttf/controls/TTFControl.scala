@@ -30,7 +30,7 @@ trait TTFControl {
     gbox setLayout new FillLayout()
     control setParent gbox
     gbox setLocation control.getLocation
-    gbox setSize gbox.computeSize(control.getSize.x, SWT.DEFAULT, false)
+    gbox setSize gbox.computeSize(control.getSize.x, control.getSize.y, false)
     width = gbox.getSize.x
     height = gbox.getSize.y
     left = gbox.getLocation.x
