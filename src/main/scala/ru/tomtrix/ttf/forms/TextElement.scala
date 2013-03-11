@@ -3,7 +3,6 @@ package ru.tomtrix.ttf.forms
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.{Text, Shell}
 import ru.tomtrix.ttf.Controls._
-import ru.tomtrix.ttf.controls.ExtendedTitle._
 
 /**
  * fes
@@ -13,7 +12,7 @@ class TextElement(shell: Shell, val title: String, val default: String = "", inv
   txtbox setMessage inviteText
   txtbox setText default
   txtbox setBounds(20, 20, TXT_WIDTH, TXT_HEIGHT)
-  val control = txtbox setTitle title
+  val control = txtbox //setTitle title
 
   def getResult = txtbox getText()
 }

@@ -7,36 +7,38 @@ import ru.tomtrix.ttf.I18n._
 import ru.tomtrix.ttf.SWTWrappers._
 import ru.tomtrix.ttf.controls.ExtendedShell._
 import ru.tomtrix.ttf.Controls._
+import ru.tomtrix.ttf.controls.{TTFControl, TTFButton}
 
 /**
  * fse
  */
 object FormGenerator {
-  val MARGIN = 10
-
-  private def rearrangeAndGetXY(elements: Seq[Element]) = {
-    var y = MARGIN
+  private def rearrangeAndGetXY(elements: Seq[TTFControl]) = {
+    var y = STD_MARGIN
     for {
       el <- elements
     } yield {
-      el.control.setLocation(MARGIN, y)
-      y += el.control.getSize.y + MARGIN
+      el.left = STD_MARGIN
+      el.top = y
+      el.init()
+      y += el.height + STD_MARGIN
     }
-    elements.map{_.control.getSize.x}.max+MARGIN -> y
+    val x = if (elements.isEmpty) STD_MARGIN else elements.map{_.width}.max + STD_MARGIN
+    x -> y
   }
 
-  def generateForm(parent: Shell)(f: (Shell) => Seq[Element])(callback: Seq[Any] => Unit) {
+  def generateForm(parent: Shell)(f: (Shell) => Seq[TTFControl])(callback: Seq[Any] => Unit) {
     val shell = new Shell(Display getDefault)
     val elements = f(shell)
     val (x, y) = rearrangeAndGetXY(elements)
-    createButton(shell, SWT.NONE, ttf"buttons.ok", max(MARGIN, x-MARGIN-2*BTN_WIDTH), y) {
-      callback(elements.map{_.getResult})
+    new TTFButton(shell, SWT.NONE) {text=ttf"buttons.ok"; left=max(STD_MARGIN, x-STD_MARGIN-2*BTN_WIDTH); top=y; onClick = { e =>
+      callback(elements.map{_.getContent})
       shell close()
-    }
-    createButton(shell, SWT.NONE, ttf"buttons.cancel", max(2*MARGIN+BTN_WIDTH, x-BTN_WIDTH), y) {
+    }}.init()
+    new TTFButton(shell, SWT.NONE) {text=ttf"buttons.cancel"; left=max(2*STD_MARGIN+BTN_WIDTH, x-BTN_WIDTH); top=y; onClick = { e =>
       shell close()
-    }
-    shell pack MARGIN
+    }}.init()
+    shell pack STD_MARGIN
     putToCenter(shell)
     shell open parent
   }

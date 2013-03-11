@@ -8,6 +8,12 @@ abstract sealed class DBMS
 case object SQLITE extends DBMS
 case object MYSQL extends DBMS
 
+abstract sealed class CHECKSTATE
+
+case object CHECKED extends CHECKSTATE
+case object UNCHECKED extends CHECKSTATE
+case object GRAYED extends CHECKSTATE
+
 object Keyboard {
   val BACKSPACE = 8
   val ENTER = 13
@@ -19,4 +25,8 @@ object Controls {
   val TXT_HEIGHT = 22
   val BTN_WIDTH = 90
   val BTN_HEIGHT = 28
+  val RADIO_WIDTH = 200
+  val RADIO_HEIGHT = 100
+  val TEXT_LIMIT = 1 << 14
+  val STD_MARGIN = 10
 }

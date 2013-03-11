@@ -1,15 +1,15 @@
 package ru.tomtrix.ttf.controls
 
-import ru.tomtrix.ttf.ExtendedString._
-import ru.tomtrix.ttf.patterns.SafeCode._
+import scala.concurrent.duration._
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.ExecutionContext.Implicits._
 import org.eclipse.swt.events._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.{SWT, widgets}
 import org.eclipse.swt.layout.FillLayout
 import org.eclipse.swt.graphics.{Image, GC}
-import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits._
+import ru.tomtrix.ttf.ExtendedString._
+import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.{SWTWrappers, Keyboard}
 import ru.tomtrix.ttf.patterns.{Akka, Repository}
 
@@ -17,7 +17,7 @@ import ru.tomtrix.ttf.patterns.{Akka, Repository}
 /**
  * fse
  */
-class ExtendedText(tbox: Text) {
+class ExtendedTTFText(tbox: Text) {
   private val shell = new Shell(Display getDefault, SWT.RESIZE | SWT.ON_TOP)
   private val list = new widgets.List(shell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL)
   private val btn = new Button(tbox.getShell, SWT.ARROW | SWT.DOWN | SWT.BORDER)
@@ -174,6 +174,6 @@ class ExtendedText(tbox: Text) {
 /**
  * grgsd
  */
-object ExtendedText {
-  implicit def toExtendedSearch(source: Text) = new ExtendedText(source)
+object ExtendedTTFText {
+  implicit def toExtendedTTFText(source: TTFText) = new ExtendedTTFText(source.control)
 }
