@@ -1,6 +1,7 @@
 package ru.tomtrix.ttf.controls
 
 import ru.tomtrix.ttf._
+import ru.tomtrix.ttf.Controls._
 import ru.tomtrix.ttf.Implicits._
 import org.eclipse.swt.SWT._
 import org.eclipse.swt.events._
@@ -11,7 +12,7 @@ import org.eclipse.swt.layout.FillLayout
 /**
  * sr
  */
-object TTControls {
+object TTFControls {
   private type Textable = {
     def setText(s: String)
     def setBounds(x: Int, y: Int, width: Int, height: Int)
@@ -34,8 +35,8 @@ object TTControls {
 
   case class SingleParameters(var parent: Composite, var x: Int, var y: Int, text: String) extends Parameters {
     var style = NONE
-    var width = 100
-    var height = 28
+    var width = -1
+    var height = -1
     var title = ""
     var compositeStyle = NONE
     var msg = ""
@@ -87,7 +88,8 @@ object TTControls {
   }
 
   def createButton(p: SingleParameters)(onClick: SelectionEvent => Unit) = {
-    val composite = new Composite(p.parent, p.compositeStyle)
+    if (p.width < 0) p.width = STD_WIDTH
+    val composite = getComposite(p)
     getSingleBase(new Button(composite, p.style), composite, p, INHERIT_FORCE) {
       _.addSelectionListener(new SelectionAdapter {
         override def widgetSelected(e: SelectionEvent) { onClick(e) }
@@ -96,7 +98,7 @@ object TTControls {
   }
 
   def createCheckbox(p: SingleParameters) (onClick: SelectionEvent => Unit) = {
-    val composite = new Composite(p.parent, p.compositeStyle)
+    val composite = getComposite(p)
     val control = new Button(composite, p.style | CHECK)
     p.state match {
       case CHECKED => control setSelection true
@@ -111,8 +113,9 @@ object TTControls {
   }
 
   def createTextbox(p: SingleParameters) (onModify: ModifyEvent => Unit) = {
+    if (p.width < 0) p.width = STD_WIDTH
     val composite = getComposite(p)
-    getSingleBase(new Text(composite, p.style | SINGLE), composite, p, INHERIT_FORCE) {
+    getSingleBase(new Text(composite, p.style | SINGLE | BORDER), composite, p) {
       _.addModifyListener(new ModifyListener {
         def modifyText(e: ModifyEvent) { onModify(e) }
       })
@@ -120,6 +123,7 @@ object TTControls {
   }
 
   def createCombobox(p: SingleParameters) (onModify: ModifyEvent => Unit) = {
+    if (p.width < 0) p.width = STD_WIDTH
     val composite = getComposite(p)
     val control = new Combo(composite, p.style)
     control setItems p.items.toArray
