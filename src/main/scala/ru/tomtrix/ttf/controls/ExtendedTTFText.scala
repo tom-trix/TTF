@@ -19,8 +19,7 @@ import ru.tomtrix.ttf.patterns.{Akka, Repository}
 /**
  * fse
  */
-class ExtendedTTFText(ttftext: TTFText) {
-  private val tbox = ttftext.control
+class ExtendedTTFText(tbox: Text) {
   private val shell = new Shell(Display getDefault, SWT.RESIZE | SWT.ON_TOP)
   private val list = new widgets.List(shell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL)
   private val btn = new Button(tbox.getParent, SWT.ARROW | SWT.DOWN)
@@ -159,21 +158,19 @@ class ExtendedTTFText(ttftext: TTFText) {
     list setItems data.toArray
   }
 
-  def setContent(akkaManager: Akka, content: Seq[String], comboStyle: Boolean = false) = {
+  def setContent(akkaManager: Akka, content: Seq[String], comboStyle: Boolean = false) {
     akka = akkaManager
     reloadData(content)
     if (!comboStyle) btn setVisible false
-    ttftext
   }
 
-  def setSQLContent(akkaManager: Akka, repository: Repository, selectSQL: String, insertSQL: Option[String] = None, comboStyle: Boolean = false) = {
+  def setSQLContent(akkaManager: Akka, repository: Repository, selectSQL: String, insertSQL: Option[String] = None, comboStyle: Boolean = false) {
     rep = repository
     akka = akkaManager
     select = selectSQL
     insert = insertSQL
     reloadData(repository.getAttribute[String](selectSQL))
     if (!comboStyle) btn setVisible false
-    ttftext
   }
 }
 
@@ -186,9 +183,8 @@ object ExtendedTTFText {
    * @param source gsrg
    * @return gsr
    */
-  implicit def toExtendedTTFText(source: TTFText) = {
-    if (source.control.getSize === (0, 0))
-      throw new IllegalArgumentException(ttf"exceptions.zerosize")
+  implicit def toExtendedTTFText(source: Text) = {
+    if (source.getSize === (0, 0)) throw new IllegalArgumentException(ttf"exceptions.zerosize")
     new ExtendedTTFText(source)
   }
 }
