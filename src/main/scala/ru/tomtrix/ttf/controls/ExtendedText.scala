@@ -19,7 +19,7 @@ import ru.tomtrix.ttf.patterns.{Akka, Repository}
 /**
  * fse
  */
-class ExtendedTTFText(tbox: Text) {
+class ExtendedText(tbox: Text) {
   private val shell = new Shell(Display getDefault, SWT.RESIZE | SWT.ON_TOP)
   private val list = new widgets.List(shell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL)
   private val btn = new Button(tbox.getParent, SWT.ARROW | SWT.DOWN)
@@ -177,7 +177,7 @@ class ExtendedTTFText(tbox: Text) {
 /**
  * grgsd
  */
-object ExtendedTTFText {
+object ExtendedText {
   /**
    * nfseofnsefrgsg
    * @param source gsrg
@@ -185,6 +185,6 @@ object ExtendedTTFText {
    */
   implicit def toExtendedTTFText(source: Text) = {
     if (source.getSize === (0, 0)) throw new IllegalArgumentException(ttf"exceptions.zerosize")
-    new ExtendedTTFText(source)
+    new ExtendedText(source)
   }
 }

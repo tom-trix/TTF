@@ -1,7 +1,6 @@
 package ru.tomtrix.ttf.controls
 
 import org.eclipse.swt.graphics.Point
-import org.eclipse.swt.widgets.Composite
 
 /**
  * htr

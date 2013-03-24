@@ -6,8 +6,6 @@ import scala.compat.Platform
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.graphics._
-import org.eclipse.swt.events.{SelectionAdapter, SelectionEvent}
-import ru.tomtrix.ttf.Controls._
 import ru.tomtrix.ttf.patterns.SafeCode._
 import ru.tomtrix.ttf.patterns.Disposable._
 

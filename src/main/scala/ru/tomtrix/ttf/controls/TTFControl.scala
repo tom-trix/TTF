@@ -1,13 +1,13 @@
 package ru.tomtrix.ttf.controls
 
-import ru.tomtrix.ttf._
-import ru.tomtrix.ttf.Controls._
-import ru.tomtrix.ttf.Implicits._
-import ru.tomtrix.ttf.controls.StdControlContainer._
 import org.eclipse.swt.SWT._
 import org.eclipse.swt.events._
 import org.eclipse.swt.widgets._
 import org.eclipse.swt.layout.FillLayout
+import ru.tomtrix.ttf._
+import ru.tomtrix.ttf.Controls._
+import ru.tomtrix.ttf.Implicits._
+import ru.tomtrix.ttf.controls.StdControlContainer._
 
 abstract class Parameters {
   var parent: Composite
@@ -31,7 +31,7 @@ case class SingleParameters(var parent: Composite, var x: Int, var y: Int, text:
   var items = Seq("")
 }
 
-case class MultiParameters(var parent: Composite, var x: Int, var y: Int, texts: Seq[String]) extends Parameters {
+case class MultiParameters(var parent: Composite, var x: Int, var y: Int, texts: String*) extends Parameters {
   var style = NONE
   var width = 120
   var height = 28
@@ -40,24 +40,24 @@ case class MultiParameters(var parent: Composite, var x: Int, var y: Int, texts:
   var margin = 10
 }
 
-abstract class TTFControl[+T <% Textable] {
+abstract sealed class TTFAbstractControl {
   val container: Composite
-  val control: T
+  val control: Any
   def getResult: String
 }
 
-abstract class TTFControls[+T <% Textable] {
-  val container: Composite
-  val controls: Seq[T]
-  def getResult: String
+abstract class TTFControl[+T <% Textable] extends TTFAbstractControl {
+  val control: T
+}
+
+abstract class TTFControls[+T <% Textable] extends TTFAbstractControl {
+  val control: Seq[T]
 }
 
 /**
  * sr
  */
 object TTFControl {
-
-
   private def getSingleBase[T <% Textable](control: T, container: Composite, p: SingleParameters, mode: Int = INHERIT_DEFAULT) (addListener: T => Unit) = {
     if (control==null) throw new IllegalArgumentException("Null control")
     container setBackground p.parent.getBackground
@@ -172,7 +172,7 @@ object TTFControl {
     }
     new TTFControls[Button] {
       val container = cont
-      val controls = radiobtns
+      val control = radiobtns
       def getResult = (radiobtns.zipWithIndex find {_._1 getSelection()} map {_._2} getOrElse -1) toString()
     }
   }
