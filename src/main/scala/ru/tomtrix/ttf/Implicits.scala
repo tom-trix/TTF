@@ -90,4 +90,6 @@ object Implicits {
    * @return sger
    */
   implicit def toExtendedPoint(p: Point) = new ExtendedPoint(p)
+
+  implicit def toPoint(a: (Int, Int)) = new Point(a._1, a._2)
 }
