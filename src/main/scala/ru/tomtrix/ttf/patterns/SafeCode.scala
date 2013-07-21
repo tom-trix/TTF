@@ -17,7 +17,7 @@ object SafeCode {
       Some(func)
     }
     catch {
-      case e: Exception => Logger.getLogger(getClass).error("SafeCode error", e)
+      case e: Throwable => Logger.getLogger(getClass).error("SafeCode error", e)
       None
     }
     finally {
